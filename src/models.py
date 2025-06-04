@@ -13,10 +13,8 @@ class Follower(db.Model):
     user_to_id: Mapped[int] = mapped_column(
         ForeignKey("user.id"), primary_key=True)
 
-    follower: Mapped["User"] = relationship(
-        foreign_keys=[user_from_id], back_populates="following")
-    followed: Mapped["User"] = relationship(
-        foreign_keys=[user_to_id], back_populates="followers")
+    follower: Mapped["User"] = relationship( back_populates="following")
+    followed: Mapped["User"] = relationship( back_populates="followers")
 
 
 class User(db.Model):
@@ -30,10 +28,8 @@ class User(db.Model):
 
     posts: Mapped[List["Post"]] = relationship(back_populates="author")
     comments: Mapped[List["Comment"]] = relationship(back_populates="author")
-    followers: Mapped[List["Follower"]] = relationship(
-        foreign_keys=[Follower.user_to_id], back_populates="followed")
-    following: Mapped[List["Follower"]] = relationship(
-        foreign_keys=[Follower.user_from_id], back_populates="follower")
+    followers: Mapped[List["Follower"]] = relationship( back_populates="followed")
+    following: Mapped[List["Follower"]] = relationship( back_populates="follower")
 
     def serialize(self):
         return {
